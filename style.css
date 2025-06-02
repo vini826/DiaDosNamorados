@@ -1,0 +1,143 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #ffdde1, #ee9ca7);
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  text-align: center;
+  position: relative;
+}
+
+.para-rielly {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #d4406d;
+  font-weight: normal;
+  font-family: 'Pacifico', cursive;
+  font-size: 20px;
+  text-shadow: 1px 1px 1px rgba(235, 28, 28, 0.74);
+  z-index: 4;
+}
+
+.envelope.open .para-rielly {
+    opacity: 0;
+    transform: translate(-50%, -200%) scale(0.8); /* Move para cima */
+}
+
+.envelope {
+  width: 600px; /* antes era 300px */
+  height: 600px; /* antes era 200px */
+  position: relative;
+  perspective: 1000px;
+  margin-bottom: 20px;
+}
+
+.flap {
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  background: #fff;
+  border: 2px solid #d76d77;
+  box-sizing: border-box;
+  transition: transform 1s;
+  z-index: 2;
+}
+
+.flap-top {
+  top: 0;
+  transform-origin: top;
+  background: #ffb6c1;
+}
+
+.flap-bottom {
+  bottom: 0;
+  transform-origin: bottom;
+  background: #ffb6c1;
+}
+
+.card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #e3f7ff;
+  padding: 20px;
+  box-sizing: border-box;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+  z-index: 1;
+  border: 2px solid #d76d77;
+  border-radius: 8px;
+  color: #333;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-y: auto; /* permite rolar caso o texto passe do espaço */
+  pointer-events: none;
+  font-family: 'Pacifico', cursive;
+
+}
+
+.card.show {
+  pointer-events: auto; /* ← permite interação depois de aberta */
+}
+
+.foto-nosso-amor {
+  width: 50%;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.selo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, #d76d77, #ffafbd);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 5;
+}
+
+.selo::before {
+  content: "💖";
+  font-size: 24px;
+  color: white;
+}
+
+.envelope.open .selo {
+    opacity: 0;
+    transform: translate(-50%, -200%) scale(0.8); /* Move para cima */
+}
+
+button {
+  background-color: #ff6f91;
+  border: none;
+  padding: 12px 24px;
+  color: white;
+  font-size: 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+  position: relative;
+  z-index: 10; /* ← fica acima da carta */
+}
+
+button:hover {
+  background-color: #ff3e66;
+}
