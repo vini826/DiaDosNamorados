@@ -3,7 +3,7 @@ const flapBottom = document.querySelector('.flap-bottom');
 const card = document.getElementById('card');
 const openBtn = document.getElementById('openBtn');
 const envelope = document.getElementById('envelope');
-const loveTimer = document.getElementById('loveTimer'); // Adicionado para o timer
+const loveTimer = document.getElementById('loveTimer');
 
 // Variáveis do carrossel
 const carouselSlide = document.querySelector('.carousel-slide');
@@ -14,9 +14,15 @@ const indicatorsContainer = document.querySelector('.carousel-indicators');
 
 let currentImageIndex = 0; // Começa na primeira imagem
 
+// --- Variáveis para funcionalidade de SWIPE (DECLARADAS AQUI) ---
+let touchStartX = 0;
+let touchEndX = 0;
+const minSwipeDistance = 50; // Distância mínima em pixels para considerar um swipe
+// --- FIM das variáveis de SWIPE ---
+
 // Função para gerar indicadores
 function createIndicators() {
-    indicatorsContainer.innerHTML = ''; // Limpa indicadores existentes
+    indicatorsContainer.innerHTML = '';
     carouselImages.forEach((_, index) => {
         const dot = document.createElement('div');
         dot.classList.add('indicator-dot');
@@ -33,10 +39,8 @@ function createIndicators() {
 
 // Função para atualizar a exibição do carrossel
 function updateCarousel() {
-    // Move o slide para a posição da imagem atual
     carouselSlide.style.transform = `translateX(${-currentImageIndex * 100}%)`;
 
-    // Atualiza o estado ativo dos indicadores
     document.querySelectorAll('.indicator-dot').forEach((dot, index) => {
         if (index === currentImageIndex) {
             dot.classList.add('active');
@@ -50,7 +54,7 @@ function updateCarousel() {
 nextBtn.addEventListener('click', () => {
     currentImageIndex++;
     if (currentImageIndex > carouselImages.length - 1) {
-        currentImageIndex = 0; // Volta para a primeira imagem
+        currentImageIndex = 0;
     }
     updateCarousel();
 });
@@ -58,7 +62,7 @@ nextBtn.addEventListener('click', () => {
 prevBtn.addEventListener('click', () => {
     currentImageIndex--;
     if (currentImageIndex < 0) {
-        currentImageIndex = carouselImages.length - 1; // Vai para a última imagem
+        currentImageIndex = carouselImages.length - 1;
     }
     updateCarousel();
 });
@@ -157,6 +161,15 @@ openBtn.addEventListener('click', () => {
         envelope.classList.add('open');
         openBtn.innerText = 'Fechar Cartinha 💌';
         isOpen = true;
+
+        // --- CÓDIGO DE VIBRAÇÃO ADICIONADO/VERIFICADO AQUI ---
+        if ('vibrate' in navigator) {
+            navigator.vibrate(200); // Vibra por 200 milissegundos
+        } else {
+            console.log("A API de Vibração não é suportada neste navegador/dispositivo.");
+        }
+        // --- FIM DO CÓDIGO DE VIBRAÇÃO ---
+
     } else {
         // Fechar cartinha
         flapTop.style.transform = 'rotateX(0deg)';
