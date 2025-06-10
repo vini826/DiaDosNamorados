@@ -3,116 +3,75 @@ const flapBottom = document.querySelector('.flap-bottom');
 const card = document.getElementById('card');
 const openBtn = document.getElementById('openBtn');
 const envelope = document.getElementById('envelope');
+const loveTimer = document.getElementById('loveTimer'); // Adicionado para o timer
 
 let isOpen = false;
 
+// Data de início do relacionamento: 28 de agosto de 2022 às 14:20
+// O mês em JavaScript é 0-indexado (Janeiro é 0, Agosto é 7)
+const startDate = new Date(2022, 7, 28, 14, 20, 0);
+
+function updateLoveTimer() {
+    const now = new Date();
+    const diff = now.getTime() - startDate.getTime(); // Diferença em milissegundos
+
+    const totalSeconds = Math.floor(diff / 1000);
+    const totalMinutes = Math.floor(totalSeconds / 60);
+    const totalHours = Math.floor(totalMinutes / 60);
+    const totalDays = Math.floor(totalHours / 24);
+
+    const years = Math.floor(totalDays / 365.25); // Considera anos bissextos aproximadamente
+    const remainingDaysAfterYears = totalDays % 365.25;
+
+    const months = Math.floor(remainingDaysAfterYears / 30.4375); // Média de dias no mês
+    const remainingDaysAfterMonths = Math.floor(remainingDaysAfterYears % 30.4375);
+
+    const hours = totalHours % 24;
+    const minutes = totalMinutes % 60;
+    const seconds = totalSeconds % 60;
+
+    loveTimer.innerHTML = `Juntos há:<br>
+                           ${years} ano${years !== 1 ? 's' : ''},
+                           ${months} mês${months !== 1 ? 'es' : ''},
+                           ${remainingDaysAfterMonths} dia${remainingDaysAfterMonths !== 1 ? 's' : ''}<br>
+                           ${hours} hora${hours !== 1 ? 's' : ''},
+                           ${minutes} minuto${minutes !== 1 ? 's' : ''} e
+                           ${seconds} segundo${seconds !== 1 ? 's' : ''}!`;
+}
+
+// Atualiza o timer a cada segundo
+setInterval(updateLoveTimer, 1000);
+
+// Chama a função uma vez ao carregar para exibir o timer imediatamente
+updateLoveTimer();
+
+
 openBtn.addEventListener('click', () => {
-  if (!isOpen) {
-    // Abrir cartinha
-    startFireworks(); // Iniciar fogos de artifício
+    if (!isOpen) {
+        // Abrir cartinha
+        flapTop.style.transform = 'rotateX(-180deg)';
+        flapBottom.style.transform = 'rotateX(180deg)';
 
-    // 💓 Vibração no celular ao abrir
-    if (navigator.vibrate) {
-      navigator.vibrate([100, 50, 150]); // vibra - pausa - vibra mais forte
+        setTimeout(() => {
+            card.classList.add('show');
+            card.style.transform = 'translateY(0)';
+            card.style.opacity = '1';
+        }, 800);
+
+        envelope.classList.add('open');
+        openBtn.innerText = 'Fechar Cartinha 💌';
+        isOpen = true;
+    } else {
+        // Fechar cartinha
+        flapTop.style.transform = 'rotateX(0deg)';
+        flapBottom.style.transform = 'rotateX(0deg)';
+
+        card.classList.remove('show');
+        card.style.transform = 'translateY(100%)';
+        card.style.opacity = '0';
+
+        envelope.classList.remove('open');
+        openBtn.innerText = 'Abrir Cartinha';
+        isOpen = false;
     }
-
-    flapTop.style.transform = 'rotateX(-180deg)';
-    flapBottom.style.transform = 'rotateX(180deg)';
-    
-    setTimeout(() => {
-      card.classList.add('show');
-      card.style.transform = 'translateY(0)';
-      card.style.opacity = '1';
-    }, 800);
-
-    envelope.classList.add('open');
-    openBtn.innerText = 'Fechar Cartinha 💌';
-    isOpen = true;
-  } else {
-    // Fechar cartinha
-    stopFireworks(); // Parar fogos de artifício
-    flapTop.style.transform = 'rotateX(0deg)';
-    flapBottom.style.transform = 'rotateX(0deg)';
-
-    card.classList.remove('show');
-    card.style.transform = 'translateY(100%)';
-    card.style.opacity = '0';
-
-    envelope.classList.remove('open');
-    openBtn.innerText = 'Abrir Cartinha';
-    isOpen = false;
-  }
 });
-
-// Função de fogos
-let fireworkInterval = null;
-let fireworkAnimationFrame = null;
-let particles = [];
-
-function startFireworks() {
-  const canvas = document.getElementById("fireworks");
-  const ctx = canvas.getContext("2d");
-  let w = window.innerWidth;
-  let h = window.innerHeight;
-  canvas.width = w;
-  canvas.height = h;
-
-  function random(min, max) {
-    return Math.random() * (max - min) + min;
-  }
-
-  function createFirework() {
-    const x = random(0, w);
-    const y = random(0, h / 2);
-    const count = 150; // Mais partículas = mais intensidade
-    for (let i = 0; i < count; i++) {
-      particles.push({
-        x,
-        y,
-        speed: random(2, 7),
-        angle: random(0, Math.PI * 2),
-        radius: random(2, 4),
-        alpha: 1,
-        decay: random(0.01, 0.02),
-        color: `hsl(${random(0, 360)}, 100%, 60%)`
-      });
-    }
-  }
-
-  function updateParticles() {
-    ctx.clearRect(0, 0, w, h);
-    particles.forEach((p, i) => {
-      p.x += Math.cos(p.angle) * p.speed;
-      p.y += Math.sin(p.angle) * p.speed + 1;
-      p.alpha -= p.decay;
-
-      if (p.alpha <= 0) {
-        particles.splice(i, 1);
-      }
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fillStyle = p.color;
-      ctx.globalAlpha = p.alpha;
-      ctx.fill();
-    });
-    ctx.globalAlpha = 1;
-
-    fireworkAnimationFrame = requestAnimationFrame(updateParticles);
-  }
-
-  fireworkInterval = setInterval(createFirework, 200); // Intervalo mais rápido = mais fogos
-  updateParticles();
-
-  // Parar automaticamente após 3 segundos
-  setTimeout(() => stopFireworks(), 3000);
-}
-
-function stopFireworks() {
-  clearInterval(fireworkInterval);
-  cancelAnimationFrame(fireworkAnimationFrame);
-  const canvas = document.getElementById("fireworks");
-  const ctx = canvas.getContext("2d");
-  particles = [];
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-}

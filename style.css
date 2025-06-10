@@ -8,6 +8,7 @@ body {
   align-items: center;
   height: 100vh;
 }
+
 #fireworks {
   position: fixed;
   top: 0;
@@ -15,7 +16,8 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 10; /* abaixo dos botões e da carta */
+  z-index: 10;
+  /* abaixo dos botões e da carta */
 }
 
 .container {
@@ -37,13 +39,16 @@ body {
 }
 
 .envelope.open .para-rielly {
-    opacity: 0;
-    transform: translate(-50%, -200%) scale(0.8); /* Move para cima */
+  opacity: 0;
+  transform: translate(-50%, -200%) scale(0.8);
+  /* Move para cima */
 }
 
 .envelope {
-  width: 600px; /* antes era 300px */
-  height: 600px; /* antes era 200px */
+  width: 600px;
+  /* antes era 300px */
+  height: 600px;
+  /* antes era 200px */
   position: relative;
   perspective: 1000px;
   margin-bottom: 20px;
@@ -90,14 +95,16 @@ body {
   color: #333;
   font-size: 16px;
   line-height: 1.5;
-  overflow-y: auto; /* permite rolar caso o texto passe do espaço */
+  overflow-y: auto;
+  /* permite rolar caso o texto passe do espaço */
   pointer-events: none;
   font-family: 'Pacifico', cursive;
 
 }
 
 .card.show {
-  pointer-events: auto; /* ← permite interação depois de aberta */
+  pointer-events: auto;
+  /* ← permite interação depois de aberta */
 }
 
 .foto-nosso-amor {
@@ -115,7 +122,7 @@ body {
   height: 60px;
   background: radial-gradient(circle, #d76d77, #ffafbd);
   border-radius: 50%;
-  box-shadow: 0 0 8px rgba(0,0,0,0.2);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -130,8 +137,9 @@ body {
 }
 
 .envelope.open .selo {
-    opacity: 0;
-    transform: translate(-50%, -200%) scale(0.8); /* Move para cima */
+  opacity: 0;
+  transform: translate(-50%, -200%) scale(0.8);
+  /* Move para cima */
 }
 
 button {
@@ -144,14 +152,34 @@ button {
   cursor: pointer;
   transition: background 0.3s;
   position: relative;
-  z-index: 10; /* ← fica acima da carta */
+  z-index: 10;
+  /* ← fica acima da carta */
 }
 
 button:hover {
   background-color: #ff3e66;
 }
 
+.love-timer {
+  margin-top: 20px;
+  /* Espaço acima do timer */
+  font-size: 1.1em;
+  color: #555;
+  font-weight: normal;
+  text-align: center;
+  line-height: 1.4;
+  font-family: 'Pacifico', cursive;
+  /* Usar uma fonte mais legível para o timer */
+}
+
 @media screen and (max-width: 600px) {
+
+  .love-timer {
+    font-size: 0.9em;
+    /* Reduz o tamanho da fonte no celular */
+    margin-top: 15px;
+  }
+
   .container {
     padding: 10px;
   }
@@ -161,12 +189,12 @@ button:hover {
     height: 120vw;
   }
 
- .card {
-  width: 100%;
-  height: 100%;
-}
+  .card {
+    width: 100%;
+    height: 100%;
+  }
 
-.para-rielly {
+  .para-rielly {
     font-size: 12px;
   }
 
@@ -208,15 +236,19 @@ button:hover {
   0% {
     transform: scale(1);
   }
+
   14% {
     transform: scale(1.1);
   }
+
   28% {
     transform: scale(1);
   }
+
   42% {
     transform: scale(1.1);
   }
+
   70% {
     transform: scale(1);
   }
@@ -225,4 +257,3 @@ button:hover {
 .heartbeat {
   animation: heartbeat 1.5s ease-in-out infinite;
 }
-
