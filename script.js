@@ -5,6 +5,102 @@ const openBtn = document.getElementById('openBtn');
 const envelope = document.getElementById('envelope');
 const loveTimer = document.getElementById('loveTimer'); // Adicionado para o timer
 
+// Variáveis do carrossel
+const carouselSlide = document.querySelector('.carousel-slide');
+const carouselImages = document.querySelectorAll('.carousel-slide img');
+const prevBtn = document.querySelector('.prev-btn');
+const nextBtn = document.querySelector('.next-btn');
+const indicatorsContainer = document.querySelector('.carousel-indicators');
+
+let currentImageIndex = 0; // Começa na primeira imagem
+
+// Função para gerar indicadores
+function createIndicators() {
+    indicatorsContainer.innerHTML = ''; // Limpa indicadores existentes
+    carouselImages.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.classList.add('indicator-dot');
+        if (index === currentImageIndex) {
+            dot.classList.add('active');
+        }
+        dot.addEventListener('click', () => {
+            currentImageIndex = index;
+            updateCarousel();
+        });
+        indicatorsContainer.appendChild(dot);
+    });
+}
+
+// Função para atualizar a exibição do carrossel
+function updateCarousel() {
+    // Move o slide para a posição da imagem atual
+    carouselSlide.style.transform = `translateX(${-currentImageIndex * 100}%)`;
+
+    // Atualiza o estado ativo dos indicadores
+    document.querySelectorAll('.indicator-dot').forEach((dot, index) => {
+        if (index === currentImageIndex) {
+            dot.classList.add('active');
+        } else {
+            dot.classList.remove('active');
+        }
+    });
+}
+
+// Event Listeners para os botões de navegação
+nextBtn.addEventListener('click', () => {
+    currentImageIndex++;
+    if (currentImageIndex > carouselImages.length - 1) {
+        currentImageIndex = 0; // Volta para a primeira imagem
+    }
+    updateCarousel();
+});
+
+prevBtn.addEventListener('click', () => {
+    currentImageIndex--;
+    if (currentImageIndex < 0) {
+        currentImageIndex = carouselImages.length - 1; // Vai para a última imagem
+    }
+    updateCarousel();
+});
+
+// --- INÍCIO DO CÓDIGO DE SWIPE ---
+carouselSlide.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+});
+
+carouselSlide.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].clientX;
+    handleSwipe();
+});
+
+function handleSwipe() {
+    const swipeDistance = touchEndX - touchStartX;
+
+    if (Math.abs(swipeDistance) > minSwipeDistance) {
+        if (swipeDistance > 0) {
+            // Swipe para a direita (anterior)
+            currentImageIndex--;
+            if (currentImageIndex < 0) {
+                currentImageIndex = carouselImages.length - 1;
+            }
+        } else {
+            // Swipe para a esquerda (próximo)
+            currentImageIndex++;
+            if (currentImageIndex > carouselImages.length - 1) {
+                currentImageIndex = 0;
+            }
+        }
+        updateCarousel();
+    }
+}
+// --- FIM DO CÓDIGO DE SWIPE ---
+
+// Inicializa o carrossel e os indicadores quando a página carrega
+document.addEventListener('DOMContentLoaded', () => {
+    createIndicators();
+    updateCarousel();
+});
+
 let isOpen = false;
 
 // Data de início do relacionamento: 28 de agosto de 2022 às 14:20
